@@ -17,8 +17,6 @@ func main() {
 		log.Fatal("连接用户中心失败", err)
 	}
 	//注册所有服务
-	registerRequest := &service.RegisterRequest{}
-	registerRequest.Mobile = "123"
 	userClient = service.NewUserServiceClient(conn)
 	userGroup := engine.Group("/user")
 	{
