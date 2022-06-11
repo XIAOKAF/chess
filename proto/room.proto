@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option go_package = "/service";
+
+package service;
+
+message CreateRequest{
+  string token = 1;
+}
+
+message JoinRequest {
+  string token = 1;
+}
+
+message ExitRequest {
+  string token = 1;
+}
+
+message Response{
+  int32 code = 1;
+  string info = 2;
+}
+
+service RoomService {
+  rpc Create(CreateRequest) returns (Response);
+  rpc Join(JoinRequest) returns (Response);
+  rpc Exit(ExitRequest) returns (Response);
+}
