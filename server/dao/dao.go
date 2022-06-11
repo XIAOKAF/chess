@@ -1,6 +1,8 @@
 package dao
 
 import (
+	"database/sql"
+	"fmt"
 	"github.com/go-redis/redis"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -8,6 +10,7 @@ import (
 )
 
 var DB *gorm.DB
+var MDB *sql.DB
 var RDB *redis.Client
 
 func InitDB() {
@@ -18,6 +21,15 @@ func InitDB() {
 		return
 	}
 	DB = db
+}
+
+func InitMDB() {
+	db, err := sql.Open("mysql", "root:045226@tcp(localhost:3306)/chess?charset=utf8mb4&parseTime=True")
+	if err != nil {
+		fmt.Println("failed", err)
+		panic(err)
+	}
+	MDB = db
 }
 
 func InitRDB() {
