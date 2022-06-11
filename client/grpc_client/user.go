@@ -24,5 +24,9 @@ func Login(ctx *gin.Context) {
 	loginRequest := &service.LoginRequest{}
 	loginRequest.Mobile = ctx.PostForm("mobile")
 	loginRequest.Password = ctx.PostForm("pwd")
-
+	response, err := userClient.Login(ctx, loginRequest)
+	if err != nil {
+		fmt.Println("登录失败", err)
+	}
+	tool.Info(ctx, response)
 }

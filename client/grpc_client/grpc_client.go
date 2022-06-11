@@ -23,6 +23,7 @@ func main() {
 	userGroup := engine.Group("/user")
 	{
 		userGroup.POST("/register", Register)
+		userGroup.POST("/login", Login)
 	}
 	smsGroup := engine.Group("/sms")
 	{
