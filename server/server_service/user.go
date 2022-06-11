@@ -23,3 +23,7 @@ func InsertUser(user *service.RegisterRequest) error {
 	}
 	return nil
 }
+
+func SelectPwd(mobile string) (string, error) {
+	return dao.SelectPwd(mobile)
+}

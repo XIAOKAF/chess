@@ -48,7 +48,30 @@ func (u *userService) Register(ctx context.Context, request *service.RegisterReq
 }
 
 func (u *userService) Login(ctx context.Context, request *service.LoginRequest) (*service.Response, error) {
-	r := &service.Response{}
-
-	return r, nil
+	resp := &service.Response{}
+	if request.Mobile == "" || request.Password == "" {
+		response := tool.Failure(resp, 400, "必要字段不能为空")
+		return response, nil
+	}
+	pwd, err := server_service.SelectPwd(request.Mobile)
+	if err != nil {
+		response := tool.Failure(resp, 500, "服务器错误")
+		return response, err
+	}
+	if pwd != request.Password {
+		response := tool.Failure(resp, 400, "密码错误")
+		return response, nil
+	}
+	err, token := server_service.CreateToken(request.Mobile, 2)
+	if err != nil {
+		response := tool.Failure(resp, 500, "服务器错误")
+		return response, err
+	}
+	err = server_service.StoreToken(request, token)
+	if err != nil {
+		response := tool.Failure(resp, 500, "服务器错误")
+		return response, nil
+	}
+	resp = tool.Failure(resp, 200, token)
+	return resp, nil
 }
