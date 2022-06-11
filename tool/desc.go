@@ -1,21 +1,19 @@
 package tool
 
-import "github.com/gin-gonic/gin"
+import (
+	"chess/service"
+)
 
 // Failure 返回错误
-func Failure(info string, code int) {
-	var ctx *gin.Context
-	ctx.JSON(code, gin.H{
-		"code": code,
-		"info": info,
-	})
+func Failure(response *service.Response, code int32, info string) *service.Response {
+	response.Code = code
+	response.Info = info
+	return response
 }
 
 // Success 返回正确
-func Success(info string, code int) {
-	var ctx *gin.Context
-	ctx.JSON(code, gin.H{
-		"code": code,
-		"info": info,
-	})
+func Success(response *service.Response, code int32, info string) *service.Response {
+	response.Code = code
+	response.Info = info
+	return response
 }
