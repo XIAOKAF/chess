@@ -11,3 +11,15 @@ func Info(ctx *gin.Context, response *service.Response) {
 		"info": response.Info,
 	})
 }
+
+func Failure(response *service.Response, code int32, info string) *service.Response {
+	response.Code = code
+	response.Info = info
+	return response
+}
+
+func Success(response *service.Response, code int32, info string) *service.Response {
+	response.Code = code
+	response.Info = info
+	return response
+}
