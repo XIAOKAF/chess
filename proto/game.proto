@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+option go_package = "/service";
+
+package service;
+
+message MoveRequest {
+  string chess = 1;
+  string Move = 2;
+}
+
+message Response {
+  string isPermitted = 1;
+  string outcome = 2;
+  int32 code = 3;
+}
+
+service GameService {
+  rpc Move(MoveRequest) returns (Response);
+}
