@@ -18,8 +18,10 @@ func main() {
 	}
 	roomClient = service.NewRoomServiceClient(conn)
 
-	engine.POST("/create", Create) //创建游戏房间
-	engine.POST("/join")
+	engine.Use(JudgeToken)
+	engine.POST("/create", Create)             //创建游戏房间
+	engine.POST("/join", Join)                 //加入游戏房间
+	engine.POST("/updateStatus", UpdateStatus) //更新玩家状态
 	engine.DELETE("/exit")
 
 	engine.Run(":/8001")

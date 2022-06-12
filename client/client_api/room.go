@@ -16,3 +16,26 @@ func Create(ctx *gin.Context) {
 	}
 	tool.Info(ctx, response)
 }
+
+func Join(ctx *gin.Context) {
+	joinRequest := &service.JoinRequest{}
+	joinRequest.Token = ctx.Request.Header.Get("token")
+	joinRequest.RoomId = ctx.PostForm("roomId")
+	response, err := roomClient.Join(ctx, joinRequest)
+	if err != nil {
+		fmt.Println("加入游戏房间错误", err)
+	}
+	tool.Info(ctx, response)
+}
+
+func UpdateStatus(ctx *gin.Context) {
+	updateRequest := &service.UpdateRequest{}
+	updateRequest.Token = ctx.Request.Header.Get("token")
+	updateRequest.RoomId = ctx.PostForm("roomId")
+	updateRequest.Status = ctx.PostForm("status")
+	response, err := roomClient.UpdateStatus(ctx, updateRequest)
+	if err != nil {
+		fmt.Println("更新状态失败", err)
+	}
+	tool.Info(ctx, response)
+}
