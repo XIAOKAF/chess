@@ -5,6 +5,7 @@ import (
 	"chess/server/service"
 	"chess/server/tool"
 	"context"
+	"gorm.io/gorm"
 )
 
 var UserService = &userService{}
@@ -15,8 +16,12 @@ type userService struct {
 func (u *userService) Register(ctx context.Context, request *proto.RegisterRequest) (*proto.Response, error) {
 	resp := &proto.Response{}
 	//数据库查询电话号码是否存在,true表示存在
-	err, flag := service.SelectUser(request.Mobile)
+	err, flag := service.SelectUser(request)
 	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			response := tool.Failure(resp, 500, "电话号码不存在")
+			return response, nil
+		}
 		response := tool.Failure(resp, 500, "服务器错误")
 		return response, err
 	}
@@ -51,7 +56,7 @@ func (u *userService) Login(ctx context.Context, request *proto.LoginRequest) (*
 		response := tool.Failure(resp, 400, "必要字段不能为空")
 		return response, nil
 	}
-	pwd, err := service.SelectPwd(request.Mobile)
+	pwd, err := service.SelectPwd(request)
 	if err != nil {
 		response := tool.Failure(resp, 500, "服务器错误")
 		return response, err

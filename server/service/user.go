@@ -3,16 +3,10 @@ package service
 import (
 	"chess/proto"
 	"chess/server/dao"
-	"database/sql"
-	"fmt"
 )
 
-func SelectUser(mobile string) (error, bool) {
-	err := dao.SelectMobile(mobile)
-	fmt.Println(err)
-	if err == sql.ErrNoRows {
-		return nil, false
-	}
+func SelectUser(user *proto.RegisterRequest) (error, bool) {
+	_, err := dao.SelectMobile(user)
 	return err, true
 }
 
@@ -24,6 +18,6 @@ func InsertUser(user *proto.RegisterRequest) error {
 	return nil
 }
 
-func SelectPwd(mobile string) (string, error) {
-	return dao.SelectPwd(mobile)
+func SelectPwd(user *proto.LoginRequest) (string, error) {
+	return dao.SelectPwd(user)
 }

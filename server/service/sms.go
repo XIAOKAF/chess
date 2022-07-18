@@ -4,6 +4,7 @@ import (
 	"chess/server/dao"
 	"chess/server/model"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"os"
 	"time"
@@ -27,6 +28,9 @@ func ParseSmsConfig() (model.Message, error) {
 }
 
 func InsertCode(mobile string, code string, duration time.Duration) error {
+	if len(mobile) != 11 || len(code) != 6 || duration != 2*time.Minute {
+		return errors.New("wrong data")
+	}
 	err := dao.Set(mobile, code, duration)
 	if err != nil {
 		return err
@@ -35,9 +39,9 @@ func InsertCode(mobile string, code string, duration time.Duration) error {
 }
 
 func GetCode(mobile string) (string, error) {
-	code, err := dao.Get(mobile + "code")
-	if err != nil {
-		return code, err
+	if len(mobile) != 11 {
+		return "", errors.New("wrong mobile")
 	}
-	return code, nil
+	code, err := dao.Get(mobile + "code")
+	return code, err
 }

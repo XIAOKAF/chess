@@ -4,9 +4,11 @@ import (
 	"chess/proto"
 )
 
-func SelectMobile(mobile string) error {
-	rows := MDB.QueryRow("SELECT password from user WHERE mobile = ?", mobile)
-	return rows.Err()
+func SelectMobile(user *proto.RegisterRequest) (string, error) {
+	var mobile string
+	result := DB.Table("user").Select("mobile").Where("mobile = ?", user.Mobile)
+	result.Scan(&mobile)
+	return mobile, result.Error
 }
 
 func InsertUser(user *proto.RegisterRequest) error {
@@ -14,15 +16,8 @@ func InsertUser(user *proto.RegisterRequest) error {
 	return result.Error
 }
 
-func SelectPwd(mobile string) (string, error) {
-	var pwd string
-	rows := MDB.QueryRow("SELECT password from user WhERE mobile = ?", mobile)
-	if rows.Err() != nil {
-		return "", rows.Err()
-	}
-	err := rows.Scan(&pwd)
-	if err != nil {
-		return "", err
-	}
-	return pwd, nil
+func SelectPwd(user *proto.LoginRequest) (string, error) {
+	u := &proto.LoginRequest{}
+	result := DB.Select("password").Where("mobile = ?", user.Mobile).Scan(&u)
+	return u.Password, result.Error
 }
