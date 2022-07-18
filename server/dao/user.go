@@ -1,13 +1,15 @@
 package dao
 
-import "chess/service"
+import (
+	"chess/proto"
+)
 
 func SelectMobile(mobile string) error {
 	rows := MDB.QueryRow("SELECT password from user WHERE mobile = ?", mobile)
 	return rows.Err()
 }
 
-func InsertUser(user *service.RegisterRequest) error {
+func InsertUser(user *proto.RegisterRequest) error {
 	result := DB.Select("mobile", "password").Create(&user)
 	return result.Error
 }
